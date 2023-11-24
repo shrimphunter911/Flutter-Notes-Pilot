@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "230624573968",
+    "project_id": "pnotes-pilot-project-dhrubi",
+    "storage_bucket": "pnotes-pilot-project-dhrubi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:230624573968:android:45db70ab9802a46dc06895",
+        "android_client_info": {
+          "package_name": "com.dhrubi.pnotes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXCJbpRmGak1bCrNOSvTPN4-6SdIQ6wxs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
