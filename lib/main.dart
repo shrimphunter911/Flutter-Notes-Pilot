@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pnotes/views/login_view.dart';
 import 'package:pnotes/views/register_view.dart';
 import 'package:pnotes/views/verify_email_view.dart';
-
+import 'dart:developer' as devtools show log;
 import 'firebase_options.dart';
 
 void main() {
@@ -35,9 +35,10 @@ class HomePage extends StatelessWidget {
         switch (snapshot.connectionState){
           case ConnectionState.done:
           final user = (FirebaseAuth.instance.currentUser);
+          print(user);
           if (user != null) {
             if (user.emailVerified) {
-              return const Text("Email is verified");
+              return const NoteView();
             } else {
               return const VerifyEmailView();
             }
@@ -50,4 +51,65 @@ class HomePage extends StatelessWidget {
       },
     );
   }
+}
+
+enum MenuAction { logout }
+
+class NoteView extends StatefulWidget {
+  const NoteView({super.key});
+
+  @override
+  State<NoteView> createState() => _NoteViewState();
+}
+
+class _NoteViewState extends State<NoteView> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Main Ui"),
+        actions: [
+          PopupMenuButton<MenuAction>(
+            onSelected: (value) async {
+              switch (value) {
+                case MenuAction.logout:
+                  final shouldLogout = await showLogOutDialog(context);
+                  if (shouldLogout) {
+                    await FirebaseAuth.instance.signOut();
+                  }
+              }
+            },
+            itemBuilder: (context) {
+              return [
+              const PopupMenuItem<MenuAction>(
+                value: MenuAction.logout,
+                child: Icon(Icons.logout, color: Colors.purple)
+              )
+              ];
+            }
+          )
+        ],
+      ),
+    );
+  }
+}
+
+Future<bool> showLogOutDialog(BuildContext context) {
+  return showDialog<bool>(
+    context: context,
+    builder:(context){
+      return AlertDialog(
+        title: const Text("Sign out"),
+        content: const Text("Are you sure you want to sign out?"),
+        actions: [
+          TextButton(onPressed: () {
+            Navigator.of(context).pop(false);
+          }, child: const Text("Cancel")),
+          TextButton(onPressed: () {
+            Navigator.of(context).pop(true);
+          }, child: const Text("Log out"))
+        ],
+      );
+    },
+  ).then((value) => value ?? false);
 }
