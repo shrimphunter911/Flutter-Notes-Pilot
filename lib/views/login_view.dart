@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:pnotes/routes.dart';
+import 'dart:developer' as devtools show log;
+
+import '../utilities/show_error_log.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -59,16 +63,27 @@ class _LoginViewState extends State<LoginView> {
                 final email = _email.text;
                 final password = _password.text;
                 try {
-                  final userCredential = await FirebaseAuth.instance
-                      .signInWithEmailAndPassword(
+                  await FirebaseAuth.instance.signInWithEmailAndPassword(
                       email: email,
                       password: password
                   );
-                  print(userCredential);
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil(notesRoute, (route) => false);
                 } on FirebaseAuthException catch (e) {
                   if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
-                    print("Invalid email or password");
+                    await showErrorDialog(context, "Invalid Credential");
                   }
+                  else {
+                    await showErrorDialog(
+                      context,
+                      'Error: ${e.code}',
+                    );
+                  }
+                } catch (e) {
+                  await showErrorDialog(
+                    context,
+                    e.toString(),
+                  );
                 }
               },
               child: const Text("Login"),
@@ -76,7 +91,7 @@ class _LoginViewState extends State<LoginView> {
           ),
           Card(
             child: TextButton(onPressed: () {
-              Navigator.of(context).pushNamedAndRemoveUntil('/register/', (route) => false);
+              Navigator.of(context).pushNamedAndRemoveUntil(registerRoute, (route) => false);
             },
                 child: const Text("Not an user? Please register!"),
             ),

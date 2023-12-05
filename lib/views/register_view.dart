@@ -1,5 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pnotes/routes.dart';
+import 'dart:developer' as devtools show log;
+
+import '../utilities/show_error_log.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -59,21 +63,25 @@ class _RegisterViewState extends State<RegisterView> {
                 final email = _email.text;
                 final password = _password.text;
                 try {
-                  final userCredential = await FirebaseAuth.instance
-                      .createUserWithEmailAndPassword(
+                  await FirebaseAuth.instance.createUserWithEmailAndPassword(
                       email: email,
                       password: password
                   );
-                  print(userCredential);
                 } on FirebaseAuthException catch (e) {
                   if (e.code == 'weak-password') {
-                    print("Try stronger Password");
+                    await showErrorDialog(context, "Try stronger password");
                   }
                   else if (e.code == 'email-already-in-use') {
-                    print("Try using a different email");
+                    await showErrorDialog(context, "Try a different email");
                   }
                   else if (e.code == 'invalid-email') {
-                    print("Invalid email");
+                    await showErrorDialog(context, "Invalid email");
+                  }
+                  else {
+                    await showErrorDialog(
+                      context,
+                      'Error: ${e.code}',
+                    );
                   }
                 }
               },
@@ -82,7 +90,7 @@ class _RegisterViewState extends State<RegisterView> {
           ),
           Card(
             child: TextButton(onPressed: () {
-              Navigator.of(context).pushNamedAndRemoveUntil('/login/', (route) => false);
+              Navigator.of(context).pushNamedAndRemoveUntil(loginRoute, (route) => false);
             },
               child: const Text("Already an user? Login!"),
             ),
