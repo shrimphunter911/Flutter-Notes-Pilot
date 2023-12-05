@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:pnotes/routes.dart';
 import 'package:pnotes/views/login_view.dart';
 import 'package:pnotes/views/register_view.dart';
 import 'package:pnotes/views/verify_email_view.dart';
 import 'dart:developer' as devtools show log;
+import 'constants/routes.dart';
 import 'firebase_options.dart';
 
 void main() {
@@ -21,6 +21,7 @@ void main() {
       loginRoute : (context) => const LoginView(),
       registerRoute : (context) => const RegisterView(),
       notesRoute : (context) => const NoteView(),
+      verifyEmailRoute: (context) => const VerifyEmailView(),
     },
   ),);
 }
