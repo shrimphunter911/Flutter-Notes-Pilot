@@ -28,7 +28,7 @@ class NoteService {
   Future<Iterable<DatabaseNote>> getAllNotes () async {
     final db = _getDatabaseOrThrow();
     final notes = await db.query(noteTable);
-    return notes.map((pilotRow) => DatabaseNote.fromRow(pilotRow));
+    return notes.map((noteRow) => DatabaseNote.fromRow(noteRow));
   }
 
   Future<DatabaseNote> getNote({required int id}) async {
