@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:pnotes/services/auth/auth_service.dart';
 import 'package:pnotes/services/crud/notes_services.dart';
 
-import '../constants/routes.dart';
-import '../enums/menu_action.dart';
-import '../main.dart';
+import '../../constants/routes.dart';
+import '../../enums/menu_action.dart';
+import '../../main.dart';
 
 class NoteView extends StatefulWidget {
   const NoteView({super.key});
@@ -34,8 +34,12 @@ class _NoteViewState extends State<NoteView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Main Ui"),
+        title: const Text("Your Notes"),
         actions: [
+          IconButton(onPressed: () {
+            Navigator.of(context).pushNamed(newNoteRoute);
+          },
+              icon: const Icon(Icons.add)),
           PopupMenuButton<MenuAction>(
               onSelected: (value) async {
                 switch (value) {
@@ -68,6 +72,7 @@ class _NoteViewState extends State<NoteView> {
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
+                    case ConnectionState.active:
                       return const Text("Waiting for all notes");
                     default:
                       return const CircularProgressIndicator();
