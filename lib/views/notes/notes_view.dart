@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pnotes/services/auth/auth_service.dart';
 import 'package:pnotes/services/crud/notes_services.dart';
+import 'package:pnotes/views/notes/notes_list_view.dart';
 
 import '../../constants/routes.dart';
 import '../../enums/menu_action.dart';
-import '../../main.dart';
+import '../../utilities/dialogs/logout_dialog.dart';
 
 class NoteView extends StatefulWidget {
   const NoteView({super.key});
@@ -69,21 +70,13 @@ class _NoteViewState extends State<NoteView> {
                     case ConnectionState.active:
                       if (snapshot.hasData) {
                         final allNotes = snapshot.data as List<DatabaseNote>;
-                        return ListView.builder(
-                          itemCount: allNotes.length,
-                          itemBuilder: (context, index) {
-                            final note = allNotes[index];
-                            return ListTile(
-                              title: Text(
-                                note.text,
-                                maxLines: 1,
-                                softWrap: true,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            );
-                          }
+                        print(allNotes);
+                        return NotesListView(
+                          notes: allNotes,
+                          onDeleteNote: (note) async {
+                            await _noteService.deleteNote(id: note.id);
+                          },
                         );
-                        return const Text("Got all the notes");
                       } else {
                         return const CircularProgressIndicator();
                       }
