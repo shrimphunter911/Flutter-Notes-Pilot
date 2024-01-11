@@ -14,7 +14,7 @@ void main() {
     title: 'Flutter Demo',
     theme: ThemeData(
 
-      colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurpleAccent),
+      colorScheme: ColorScheme.fromSeed(seedColor: Colors.pinkAccent),
     ),
     home: const HomePage(),
     routes: {
