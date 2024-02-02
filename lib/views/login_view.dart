@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pnotes/services/auth/auth_exceptions.dart';
 import 'package:pnotes/services/auth/bloc/auth_bloc.dart';
 import 'package:pnotes/services/auth/bloc/auth_events.dart';
-import 'package:pnotes/utilities/dialogs/loading_dialog.dart';
-import '../constants/routes.dart';
 import '../services/auth/bloc/auth_state.dart';
 import '../utilities/dialogs/error_dialog.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,51 +48,63 @@ class _LoginViewState extends State<LoginView> {
       appBar: AppBar(
         title: const Text("Login"),
       ),
-      body: Column(
-        children: [
-          Card(
-            child: TextField(
-              controller: _email,
-              decoration: const InputDecoration(hintText: "Please enter your email address"),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Card(
+              child: TextField(
+                controller: _email,
+                decoration: const InputDecoration(hintText: "Please enter your email address"),
+              ),
             ),
-          ),
-          Card(
-            child: TextField(
-              controller: _password,
-              obscureText: true,
-              autocorrect: false,
-              enableSuggestions: false,
-              keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(hintText: "Enter a password"),
+            Card(
+              child: TextField(
+                controller: _password,
+                obscureText: true,
+                autocorrect: false,
+                enableSuggestions: false,
+                keyboardType: TextInputType.emailAddress,
+                decoration: const InputDecoration(hintText: "Enter a password"),
+              ),
             ),
-          ),
-          Card(
-            child: TextButton(
-              style: TextButton.styleFrom(foregroundColor: Theme.of(context).colorScheme.primary),
-              onPressed: () async {
+            Card(
+              child: TextButton(
+                style: TextButton.styleFrom(foregroundColor: Theme.of(context).colorScheme.primary),
+                onPressed: () async {
 
-                final email = _email.text;
-                final password = _password.text;
+                  final email = _email.text;
+                  final password = _password.text;
+                  context.read<AuthBloc>().add(
+                      AuthEventLogIn(
+                          email,
+                          password
+                      )
+                  );
+                },
+                child: const Text("Login"),
+              ),
+            ),
+            Card(
+              child: TextButton(onPressed: () {
                 context.read<AuthBloc>().add(
-                    AuthEventLogIn(
-                        email,
-                        password
-                    )
+                  const AuthEventForgotPassword(),
                 );
               },
-              child: const Text("Login"),
+                child: const Text("Forgot Password"),
+              ),
             ),
-          ),
-          Card(
-            child: TextButton(onPressed: () {
-              context.read<AuthBloc>().add(
-                const AuthEventShouldRegister(),
-              );
-            },
-                child: const Text("Not an user? Please register!"),
-            ),
-          )
-        ],
+            Card(
+              child: TextButton(onPressed: () {
+                context.read<AuthBloc>().add(
+                  const AuthEventShouldRegister(),
+                );
+              },
+                  child: const Text("Not an user? Please register!"),
+              ),
+            )
+          ],
+        ),
       ),
     ),
 );
