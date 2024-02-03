@@ -18,6 +18,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MaterialApp(
     title: 'Flutter Demo',
+    debugShowCheckedModeBanner: false,
     theme: ThemeData(
 
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.pinkAccent),
